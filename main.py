@@ -94,18 +94,18 @@ class Reviewer(Mentor):
 student_winnie = Student('Винни', 'Пух', 'медведь')
 student_winnie.finished_courses += ['Git']
 student_winnie.courses_in_progress += ['Python']
-student_winnie.courses_in_progress += ['Git', 'HTML']
-student_winnie.grades['Git'] = [7, 9]
-student_winnie.grades['Python'] = [9, 7]
+# student_winnie.courses_in_progress += ['Git', 'HTML']
+student_winnie.grades['Git'] = [10]
+student_winnie.grades['Python'] = [7, 10]
 student_winnie.grades['HTML'] = [10]
 
 
 student_piglet = Student('Пятачок', 'Поросёнок', 'свинья')
 student_piglet.finished_courses += ['Git']
 student_piglet.courses_in_progress += ['Python']
-student_piglet.courses_in_progress += ['Git', 'HTML', 'CSS']
-student_piglet.grades['Git'] = [8, 7]
-student_piglet.grades['Python'] = [7, 8]
+# student_piglet.courses_in_progress += ['Git', 'HTML', 'CSS']
+student_piglet.grades['Git'] = [8]
+student_piglet.grades['Python'] = [7]
 student_piglet.grades['HTML'] = [8]
 student_piglet.grades['CSS'] = [7]
 
@@ -114,28 +114,33 @@ student_robin = Student('Кристофер', 'Робин', 'мальчик')
 student_robin.finished_courses += ['Git']
 student_robin.courses_in_progress += ['Python']
 student_robin.courses_in_progress += ['Git', 'HTML', 'CSS', 'JS']
-student_robin.grades['Git'] = [10, 7]
-student_robin.grades['Python'] = [9, 8]
+student_robin.grades['Git'] = [10]
+student_robin.grades['Python'] = [9]
 student_robin.grades['HTML'] = [10, 8]
 student_robin.grades['CSS'] = [9]
-student_robin.grades['CSS'] = [8]
+student_robin.grades['JS'] = [8]
 
 # print(student_winnie.finished_courses)
 # print(student_winnie.courses_in_progress)
-print(student_winnie.grades)
+# print(student_winnie.grades)
 # print(student_winnie.student_list)
 
 
 lecturer_sava = Lecturer('Сава', 'Филин')
 lecturer_sava.courses_attached += ['Git']
-lecturer_sava.grades['Git'] = [7, 8, 7, 10, 9, 6, 9, 10]
+lecturer_sava.grades['Git'] = [7, 8, 7, 10, 9, 6, 9, 7]
 lecturer_sava.grades['Python'] = [9, 7, 8, 9, 10]
+
+lecturer_rabbit = Lecturer('Кролик', 'Заяц')
+lecturer_rabbit.courses_attached += ['Git']
+lecturer_rabbit.grades['Git'] = [10, 9, 10, 9, 10]
+lecturer_rabbit.grades['Python'] = [9, 7, 8, 9, 10]
 
 # print(lecturer_sava.name)
 # print(lecturer_sava.grades)
 # print(lecturer_sava.courses_attached)
 
-student_winnie.rate_lecturer(lecturer_sava, 'Git', 8)
+# student_winnie.rate_lecturer(lecturer_sava, 'Git', 8)
 
 # print(lecturer_sava.grades)
 
@@ -149,5 +154,46 @@ reviewer = Reviewer('Ослик', 'Иа')
 print(student_piglet)
 print(student_robin)
 print(student_winnie)
-print(student_robin)
-print(student_rating)
+# print(student_robin.name)
+# print(student_rating)
+
+
+def average_rate_student_course(students, course):
+    average_rate = 0
+    for student in students:
+        if course not in student.grades.keys():
+            return (f'Среди выбранных студентов есть те, кто данный курс {course} не изучают.\n'
+                    'Расчёт средней оценки по данному курсу не возможен.')
+        else:
+            for rate in student.grades.values():
+                average = sum(student.grades[course]) / len(student.grades[course])
+        average_rate += average
+    aver = round((average_rate / len(students)), 1)
+
+    return f'Средняя оценка студентов за данный курс {course} составляет: {aver}'
+
+
+def average_rate_lecturer_course(lecturers, course):
+    average_rate = 0
+    for lecturer in lecturers:
+        if course not in lecturer.grades.keys():
+            return (f'Среди выбранных лекторов есть те, кто данный курс {course} не преподают.\n'
+                    'Расчёт средней оценки по данному курсу не возможен.')
+        else:
+            for rate in lecturer.grades.values():
+                average = sum(lecturer.grades[course]) / len(lecturer.grades[course])
+        average_rate += average
+    aver = round((average_rate / len(lecturers)), 1)
+
+    return f'Средняя оценка лекторов за данный курс {course} составляет: {aver}'
+
+
+students = [student_piglet, student_robin]
+lecturers = [lecturer_sava, lecturer_rabbit]
+
+
+aver_students = average_rate_student_course(students, 'Git')
+print(aver_students)
+
+aver_lecturers = average_rate_lecturer_course(lecturers, 'Git')
+print(aver_lecturers)
