@@ -36,6 +36,11 @@ class Student:
         self.student_rating[name] = self.average_rate_for_hw(grades=self.grades)
         return student_rating
 
+    def __lt__(self, other):
+        print('Лекторы лучше')
+        other = Lecturer.average_rate_for_lecture(self, grades=self.grades)
+        return self.average_rate_for_hw(grades=self.grades) < other
+
     def __str__(self):
         return (
             f'\nИмя: {self.name}\n'
@@ -69,6 +74,11 @@ class Lecturer(Mentor):
         average_lecture = round((k / len(self.grades)), 1)
         return average_lecture
 
+    def __lt__(self, other):
+        print('Студенты лучше')
+        other = Student.average_rate_for_hw(self, grades=self.grades)
+        return self.average_rate_for_lecture(grades=self.grades) < other
+
     def __str__(self):
         return (
             f'Имя: {self.name}\nФамилия: {self.surname}\n'
@@ -94,7 +104,7 @@ class Reviewer(Mentor):
 student_winnie = Student('Винни', 'Пух', 'медведь')
 student_winnie.finished_courses += ['Git']
 student_winnie.courses_in_progress += ['Python']
-# student_winnie.courses_in_progress += ['Git', 'HTML']
+student_winnie.courses_in_progress += ['Git', 'HTML']
 student_winnie.grades['Git'] = [10]
 student_winnie.grades['Python'] = [7, 10]
 student_winnie.grades['HTML'] = [10]
@@ -103,7 +113,7 @@ student_winnie.grades['HTML'] = [10]
 student_piglet = Student('Пятачок', 'Поросёнок', 'свинья')
 student_piglet.finished_courses += ['Git']
 student_piglet.courses_in_progress += ['Python']
-# student_piglet.courses_in_progress += ['Git', 'HTML', 'CSS']
+student_piglet.courses_in_progress += ['Git', 'HTML', 'CSS']
 student_piglet.grades['Git'] = [8]
 student_piglet.grades['Python'] = [7]
 student_piglet.grades['HTML'] = [8]
@@ -128,7 +138,7 @@ student_robin.grades['JS'] = [8]
 
 lecturer_sava = Lecturer('Сава', 'Филин')
 lecturer_sava.courses_attached += ['Git']
-lecturer_sava.grades['Git'] = [7, 8, 7, 10, 9, 6, 9, 7]
+lecturer_sava.grades['Git'] = [7, 8, 7, 10, 9, 10, 9, 10]
 lecturer_sava.grades['Python'] = [9, 7, 8, 9, 10]
 
 lecturer_rabbit = Lecturer('Кролик', 'Заяц')
@@ -140,16 +150,14 @@ lecturer_rabbit.grades['Python'] = [9, 7, 8, 9, 10]
 # print(lecturer_sava.grades)
 # print(lecturer_sava.courses_attached)
 
-# student_winnie.rate_lecturer(lecturer_sava, 'Git', 8)
+student_winnie.rate_lecturer(lecturer_sava, 'Git', 8)
 
 # print(lecturer_sava.grades)
 
 reviewer = Reviewer('Ослик', 'Иа')
 # print(reviewer)
-# print(lecturer_sava)
+print(lecturer_sava)
 
-# print(student_winnie.name)
-# print(lecturer_sava)
 
 print(student_piglet)
 print(student_robin)
@@ -197,3 +205,8 @@ print(aver_students)
 
 aver_lecturers = average_rate_lecturer_course(lecturers, 'Git')
 print(aver_lecturers)
+
+is_lt = (student_piglet < lecturer_sava)
+is_lt  # True
+# is_lt = (lecturer_sava < student_piglet)
+# print(is_lt)
